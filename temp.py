@@ -61,36 +61,43 @@ embarked_list = ['1' if x == 'S' else '2' if x == 'C' else '3' for x in embarked
 #corrmat = read_file.corr()
 #print(corrmat)
 
+#Q9
+
+print(read_file.groupby('Pclass').mean()) #train data
+#Q10
+print(read_file.groupby('Sex').mean()) # train_data
+
+#Q11
+hist1 = read_file[read_file['Survived'] == 0].hist(column = 'Age', bins = 80 )
+hist2 = read_file[read_file['Survived'] == 1].hist(column = 'Age', bins = 80 )
+
+#Q12
+hist3 = read_file[(read_file['Survived'] == 1) & (read_file['Pclass'] == 1)].hist(column = 'Age', bins = 80 )
+hist4 = read_file[(read_file['Survived'] == 0) & (read_file['Pclass'] == 1)].hist(column = 'Age', bins = 80 )
+hist5 = read_file[(read_file['Survived'] == 1) & (read_file['Pclass'] == 2)].hist(column = 'Age', bins = 80 )
+hist6 = read_file[(read_file['Survived'] == 0) & (read_file['Pclass'] == 2)].hist(column = 'Age', bins = 80 )
+hist7 = read_file[(read_file['Survived'] == 1) & (read_file['Pclass'] == 3)].hist(column = 'Age', bins = 80 )
+hist8 = read_file[(read_file['Survived'] == 0) & (read_file['Pclass'] == 3)].hist(column = 'Age', bins = 80 )
 
 
-print(read_file.groupby('Pclass').mean())
-
-print(read_file.groupby('Sex').mean())
-
-
-#hist1 = read_file[read_file['Survived'] == 0].hist(column = 'Age', bins = 80 )
-#hist2 = read_file[read_file['Survived'] == 1].hist(column = 'Age', bins = 80 )
-#hist3 = read_file[(read_file['Survived'] == 1) & (read_file['Pclass'] == 1)].hist(column = 'Age', bins = 80 )
-#hist4 = read_file[(read_file['Survived'] == 0) & (read_file['Pclass'] == 1)].hist(column = 'Age', bins = 80 )
-#hist5 = read_file[(read_file['Survived'] == 1) & (read_file['Pclass'] == 2)].hist(column = 'Age', bins = 80 )
-#hist6 = read_file[(read_file['Survived'] == 0) & (read_file['Pclass'] == 2)].hist(column = 'Age', bins = 80 )
-#hist7 = read_file[(read_file['Survived'] == 1) & (read_file['Pclass'] == 3)].hist(column = 'Age', bins = 80 )
-#hist8 = read_file[(read_file['Survived'] == 0) & (read_file['Pclass'] == 3)].hist(column = 'Age', bins = 80 )
 #print(read_file[(read_file['Survived'] == 0) & (read_file['Embarked'] == 'S')].groupby('Sex').mean())
 #hist8 = read_file.hist(column = 'Fare', bins = 50 )
- 
-#grid = sns.FacetGrid(read_file, row = 'Embarked' , col='Survived', size = 2.2, aspect = 2 )
-#grid.map(sns.barplot, 'Sex', 'Fare', alpha = 0.5, ci = None)
-#grid.add_legend()
 
+#Q13 
+grid = sns.FacetGrid(read_file, row = 'Embarked' , col='Survived', size = 2.2, aspect = 2 )
+grid.map(sns.barplot, 'Sex', 'Fare', alpha = 0.5, ci = None)
+grid.add_legend()
+
+#Q14
 count = read_file['Ticket'].value_counts()
 print(count)
 print (" Rate of duplicate" , (891 - 681)/891 )
 
+#Q15
 read_file.drop(['Survived'], axis =1)
 read_test = pd.read_csv("test.csv")
 read_combined = pd.concat([read_file, read_test], sort = True)
-print ("cabin: ", read_file['Cabin'].isna().sum() )
+print ("cabin: ", read_combined['Cabin'].isna().sum() )
 
 #Q16#
 read_file['Sex'].replace(['male', 'female'], [0,1], inplace = True)
@@ -98,6 +105,12 @@ read_file.rename(columns = {'Sex': 'Gender'}, inplace = True)
 print(read_file.columns)
 
 #Q17#
+read_test = pd.read_csv("test.csv")
+read_combined = pd.concat([read_file, read_test], sort = True)
+
+read_combined['Age'] = read_combined.apply(lambda row: np.random.uniform(low = read_combined['Age'].std(), high = read_combined['Age'].median())
+ if np.isnan(row.Age) else  row.Age, axis = 1 )
+print( read_combined['Age'].to_string())
 
 
 
